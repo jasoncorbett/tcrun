@@ -1,0 +1,45 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <!-- The configuration and platform will be used to determine which
+         assemblies to include from solution and project documentation
+         sources -->
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{001e872e-4ba5-4b0b-acee-b7895763f539}</ProjectGuid>
+    <SHFBSchemaVersion>1.8.0.0</SHFBSchemaVersion>
+    <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual
+         Studio adds them anyway -->
+    <AssemblyName>Documentation</AssemblyName>
+    <RootNamespace>Documentation</RootNamespace>
+    <Name>Documentation</Name>
+    <!-- SHFB properties -->
+    <OutputPath>.\Help\</OutputPath>
+    <HtmlHelpName>TCApiDocumentation</HtmlHelpName>
+    <FrameworkVersion>3.5</FrameworkVersion>
+    <KeepLogFile>False</KeepLogFile>
+    <ProjectSummary>The TCApi library is the core of the automation framework.  For a place to start take a look at the QA.Common.TCApi namespace.</ProjectSummary>
+    <HelpTitle>TCApi Documentation for .NET</HelpTitle>
+    <PresentationStyle>hana</PresentationStyle>
+    <RootNamespaceContainer>False</RootNamespaceContainer>
+    <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected</VisibleItems>
+    <DocumentationSources>
+      <DocumentationSource sourceFile="TCApi.csproj" configuration="Release" />
+    </DocumentationSources>
+    <NamespaceSummaries>
+      <NamespaceSummaryItem name="(global)" isDocumented="False" />
+      <NamespaceSummaryItem name="QA.Common.TCApi" isDocumented="True">This api is useful for writing tests in .NET and for loading and running them.  Most people reading this will be writing tests, and will want to focus on the &lt;see cref="ITestCase" /&gt; interface, &lt;see cref="AbstractTestCase" /&gt; class, and the &lt;see cref="TCNumber" /&gt; and &lt;see cref="Category" /&gt; attributes.  The rest of the items in this library are mostly useful for writing a test case runner, but one will likely be provided for you.</NamespaceSummaryItem>
+    </NamespaceSummaries>
+    <SyntaxFilters>CSharp</SyntaxFilters>
+    <HelpFileFormat>HtmlHelp1x</HelpFileFormat>
+    <SandcastlePath>..\..\..\..\..\Program Files\Sandcastle\</SandcastlePath>
+  </PropertyGroup>
+  <!-- There are no properties for these two groups but they need to appear in
+       order for Visual Studio to perform the build. -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  </PropertyGroup>
+  <!-- Import the SHFB build targets -->
+  <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" />
+</Project>
