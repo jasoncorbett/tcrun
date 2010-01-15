@@ -31,7 +31,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\TCApi.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\TCApi.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -45,27 +45,27 @@
   <ItemGroup>
     <Reference Include="CookComputing.XmlRpcV2, Version=2.4.0.0, Culture=neutral, PublicKeyToken=a7d6e17aa302004d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\tcrun\lib\CookComputing.XmlRpcV2.dll</HintPath>
+      <HintPath>..\Dependencies\CookComputing.XmlRpcV2.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="INIFileParser, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\tcrun\lib\INIFileParser.dll</HintPath>
+      <HintPath>..\Dependencies\INIFileParser.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=f9a0971c97b66427, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\tcrun\lib\log4net.dll</HintPath>
+      <HintPath>..\Dependencies\log4net.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Ninject.Conditions, Version=1.5.0.158, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\tcrun\lib\Ninject.Conditions.dll</HintPath>
+      <HintPath>..\Dependencies\Ninject.Conditions.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Ninject.Core, Version=1.5.0.158, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\tcrun\lib\Ninject.Core.dll</HintPath>
+      <HintPath>..\Dependencies\Ninject.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -84,7 +84,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="XmlDiffPatch, Version=1.0.8.28, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\tcrun\lib\xmldiffpatch.dll</HintPath>
+      <HintPath>..\Dependencies\xmldiffpatch.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
@@ -117,8 +117,8 @@
   </Target>
   <Target Name="AfterBuild">
   </Target>
-  -->
   <PropertyGroup>
     <PostBuildEvent>copy /Y "$(TargetPath)" "$(ProjectDir)..\..\tcrun\lib\"</PostBuildEvent>
   </PropertyGroup>
+  -->
 </Project>
