@@ -45,27 +45,27 @@
   <ItemGroup>
     <Reference Include="CookComputing.XmlRpcV2, Version=2.4.0.0, Culture=neutral, PublicKeyToken=a7d6e17aa302004d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\CookComputing.XmlRpcV2.dll</HintPath>
+      <HintPath>$(MSBuildProjectDirectory)\..\Dependencies\CookComputing.XmlRpcV2.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="INIFileParser, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\INIFileParser.dll</HintPath>
+      <HintPath>$(MSBuildProjectDirectory)\..\Dependencies\INIFileParser.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=f9a0971c97b66427, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\log4net.dll</HintPath>
+      <HintPath>$(MSBuildProjectDirectory)\..\Dependencies\log4net.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Ninject.Conditions, Version=1.5.0.158, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\Ninject.Conditions.dll</HintPath>
+      <HintPath>$(MSBuildProjectDirectory)\..\Dependencies\Ninject.Conditions.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Ninject.Core, Version=1.5.0.158, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\Ninject.Core.dll</HintPath>
+      <HintPath>$(MSBuildProjectDirectory)\..\Dependencies\Ninject.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -84,7 +84,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="XmlDiffPatch, Version=1.0.8.28, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\xmldiffpatch.dll</HintPath>
+      <HintPath>$(MSBuildProjectDirectory)\..\Dependencies\xmldiffpatch.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
