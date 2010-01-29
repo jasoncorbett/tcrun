@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <BuildPath Condition="'$(BuildPath)' == ''">$(MSBuildProjectDirectory)</BuildPath>
+        <ExtensionTasksPath Condition="'$(ExtensionTasksPath)' == ''">$(MSBuildProjectDirectory)..\BuildExtensions\</ExtensionTasksPath>
+    </PropertyGroup>
+
+    <!-- ============== Framework ============== -->
+    <UsingTask AssemblyFile="$(ExtensionTasksPath)BuildUtils.dll" TaskName="DelTree"/>
+
+
+    <Target Name="ReallyClean">
+        <DelTree Directories="bin;obj" />
+    </Target>
+</Project>
