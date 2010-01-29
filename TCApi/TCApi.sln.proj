@@ -5,11 +5,11 @@
     <AspNetConfiguration>$(Configuration)</AspNetConfiguration>
   </PropertyGroup>
   <PropertyGroup>
-    <SolutionDir>/Users/jcorbett/Development/grow/Shared_Components/TCApi/</SolutionDir>
+    <SolutionDir>$(MSBuildProjectDirectory)</SolutionDir>
     <SolutionExt>.sln</SolutionExt>
     <SolutionFileName>TCApi.sln</SolutionFileName>
     <SolutionName>TCApi</SolutionName>
-    <SolutionPath>/Users/jcorbett/Development/grow/Shared_Components/TCApi/TCApi.sln</SolutionPath>
+    <SolutionPath>$(SolutionDir)TCApi.sln</SolutionPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == '' ">
     <Configuration>Debug</Configuration>
