@@ -7,9 +7,18 @@
 
     <!-- ============== Framework ============== -->
     <UsingTask AssemblyFile="$(ExtensionTasksPath)BuildUtils.dll" TaskName="DelTree"/>
+    <UsingTask AssemblyFile="$(ExtensionTasksPath)BuildUtils.dll" TaskName="GenerateVersionNumber"/>
+    <UsingTask AssemblyFile="$(ExtensionTasksPath)BuildUtils.dll" TaskName="SetAssemblyVersion"/>
 
 
     <Target Name="ReallyClean">
         <DelTree Directories="bin;obj" />
+    </Target>
+
+    <Target Name="CommonBeforeBuild">
+        <ReadLinesFromFile File="$(SolutionDir)\Version.txt">
+            <Output TaskParameter="Lines" PropertyName="VersionString" />
+        </ReadLinesFromFile>
+        <SetAssemblyVersion Version="$(VersionString)" />
     </Target>
 </Project>

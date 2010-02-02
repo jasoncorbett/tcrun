@@ -1,6 +1,22 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build" InitialTargets="ValidateSolutionConfiguration">
   <UsingTask TaskName="CreateTemporaryVCProject" AssemblyName="Microsoft.Build.Tasks, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <UsingTask TaskName="ResolveVCProjectOutput" AssemblyName="Microsoft.Build.Tasks, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+
+  <!--  Build Number Settings for tcrun, set it here, and all the generated artifacts get set -->
+  <PropertyGroup>
+    <VersionMajor>1</VersionMajor>
+    <VersionMinor>0</VersionMinor>
+    <VersionRelease>0</VersionRelease>
+    <VersionBuildNumber>AUTO</VersionBuildNumber>
+  </PropertyGroup>
+
+  <!-- End Build Number Settings -->
+
+  <PropertyGroup>
+    <ExtensionTasksPath>$(MSBuildProjectDirectory)\BuildExtensions\</ExtensionTasksPath>
+  </PropertyGroup>
+  <Import Project="$(ExtensionTasksPath)Common.tasks" />
+
   <PropertyGroup Condition=" ('$(AspNetConfiguration)' == '') ">
     <AspNetConfiguration>$(Configuration)</AspNetConfiguration>
   </PropertyGroup>
@@ -41,7 +57,7 @@
     <Message Text="Building solution configuration &quot;$(Configuration)|$(Platform)&quot;." Condition="'$(CurrentSolutionConfigurationContents)' != ''" />
   </Target>
   <Target Name="TCApi" Condition="'$(CurrentSolutionConfigurationContents)' != ''">
-    <MSBuild Projects="TCApi\TCApi.csproj" Properties="Configuration=$(Configuration); Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" Condition=" '$(Platform)' == 'Any CPU' " />
+    <MSBuild Projects="TCApi\TCApi.csproj" Properties="Configuration=$(Configuration); Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" Condition=" '$(Platform)' == 'Any CPU' " Targets="CommonBeforeBuild;Build" />
   </Target>
   <Target Name="TCApi:Clean" Condition="'$(CurrentSolutionConfigurationContents)' != ''">
     <MSBuild Projects="TCApi\TCApi.csproj" Targets="ReallyClean" Properties="Configuration=$(Configuration); Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" Condition=" '$(Platform)' == 'Any CPU' " />
@@ -49,11 +65,8 @@
   <Target Name="TCApi:Rebuild" Condition="'$(CurrentSolutionConfigurationContents)' != ''">
     <MSBuild Projects="TCApi\TCApi.csproj" Targets="Rebuild" Properties="Configuration=$(Configuration); Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" Condition=" '$(Platform)' == 'Any CPU' " />
   </Target>
-  <Target Name="TCApi:Publish" Condition="'$(CurrentSolutionConfigurationContents)' != ''">
-    <MSBuild Projects="TCApi\TCApi.csproj" Targets="Publish" Properties="Configuration=$(Configuration); Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" Condition=" '$(Platform)' == 'Any CPU' " />
-  </Target>
   <Target Name="tcrun" Condition="'$(CurrentSolutionConfigurationContents)' != ''" DependsOnTargets="TCApi">
-    <MSBuild Projects="tcrun\tcrun.csproj" Properties="Configuration=$(Configuration); Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" Condition=" '$(Platform)' == 'Any CPU' " />
+    <MSBuild Projects="tcrun\tcrun.csproj" Properties="Configuration=$(Configuration); Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" Condition=" '$(Platform)' == 'Any CPU' " Targets="CommonBeforeBuild;Build" />
   </Target>
   <Target Name="tcrun:Clean" Condition="'$(CurrentSolutionConfigurationContents)' != ''" DependsOnTargets="TCApi:Clean">
     <MSBuild Projects="tcrun\tcrun.csproj" Targets="ReallyClean" Properties="Configuration=$(Configuration); Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" Condition=" '$(Platform)' == 'Any CPU' " />
@@ -61,11 +74,8 @@
   <Target Name="tcrun:Rebuild" Condition="'$(CurrentSolutionConfigurationContents)' != ''" DependsOnTargets="TCApi:Rebuild">
     <MSBuild Projects="tcrun\tcrun.csproj" Targets="Rebuild" Properties="Configuration=$(Configuration); Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" Condition=" '$(Platform)' == 'Any CPU' " />
   </Target>
-  <Target Name="tcrun:Publish" Condition="'$(CurrentSolutionConfigurationContents)' != ''" DependsOnTargets="TCApi:Publish">
-    <MSBuild Projects="tcrun\tcrun.csproj" Targets="Publish" Properties="Configuration=$(Configuration); Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" Condition=" '$(Platform)' == 'Any CPU' " />
-  </Target>
   <Target Name="TCApiTests" Condition="'$(CurrentSolutionConfigurationContents)' != ''" DependsOnTargets="TCApi">
-    <MSBuild Projects="TCApiTests\TCApiTests.csproj" Properties="Configuration=$(Configuration); Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" Condition=" '$(Platform)' == 'Any CPU' " />
+    <MSBuild Projects="TCApiTests\TCApiTests.csproj" Properties="Configuration=$(Configuration); Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" Condition=" '$(Platform)' == 'Any CPU' " Targets="CommonBeforeBuild;Build" />
   </Target>
   <Target Name="TCApiTests:Clean" Condition="'$(CurrentSolutionConfigurationContents)' != ''" DependsOnTargets="TCApi:Clean">
     <MSBuild Projects="TCApiTests\TCApiTests.csproj" Targets="ReallyClean" Properties="Configuration=$(Configuration); Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" Condition=" '$(Platform)' == 'Any CPU' " />
@@ -73,19 +83,24 @@
   <Target Name="TCApiTests:Rebuild" Condition="'$(CurrentSolutionConfigurationContents)' != ''" DependsOnTargets="TCApi:Rebuild">
     <MSBuild Projects="TCApiTests\TCApiTests.csproj" Targets="Rebuild" Properties="Configuration=$(Configuration); Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" Condition=" '$(Platform)' == 'Any CPU' " />
   </Target>
-  <Target Name="TCApiTests:Publish" Condition="'$(CurrentSolutionConfigurationContents)' != ''" DependsOnTargets="TCApi:Publish">
-    <MSBuild Projects="TCApiTests\TCApiTests.csproj" Targets="Publish" Properties="Configuration=$(Configuration); Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" Condition=" '$(Platform)' == 'Any CPU' " />
+
+
+  <Target Name="CreateVersionString">
+    <GenerateVersionNumber Major="$(VersionMajor)" Minor="$(VersionMinor)" Release="$(VersionRelease)" BuildNumber="$(VersionBuildNumber)">
+      <Output TaskParameter="Version" PropertyName="VersionString" />
+    </GenerateVersionNumber>
+    <WriteLinesToFile
+            File="Version.txt"
+            Lines="$(VersionString)"
+            Overwrite="true"/>
   </Target>
-  <Target Name="Build" Condition="'$(CurrentSolutionConfigurationContents)' != ''">
-    <CallTarget Targets="TCApi;tcrun;TCApiTests" RunEachTargetSeparately="true" />
+  <Target Name="Build" Condition="'$(CurrentSolutionConfigurationContents)' != ''" DependsOnTargets="CreateVersionString">
+    <CallTarget Targets="TCApi;tcrun;TCApiTests" RunEachTargetSeparately="false" />
   </Target>
   <Target Name="Clean" Condition="'$(CurrentSolutionConfigurationContents)' != ''">
     <CallTarget Targets="TCApi:Clean;tcrun:Clean;TCApiTests:Clean" RunEachTargetSeparately="true" />
   </Target>
   <Target Name="Rebuild" Condition="'$(CurrentSolutionConfigurationContents)' != ''">
     <CallTarget Targets="TCApi:Rebuild;tcrun:Rebuild;TCApiTests:Rebuild" RunEachTargetSeparately="true" />
-  </Target>
-  <Target Name="Publish" Condition="'$(CurrentSolutionConfigurationContents)' != ''">
-    <CallTarget Targets="TCApi:Publish;tcrun:Publish;TCApiTests:Publish" RunEachTargetSeparately="true" />
   </Target>
 </Project>
