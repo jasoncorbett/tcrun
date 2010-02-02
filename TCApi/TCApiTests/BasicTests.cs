@@ -51,8 +51,10 @@ namespace QA.Common.TCApi.Tests.Basic
         }
     }
 
+    // Took it out of TCApi as this test doesn't work on mono / on a build server
     [TCName("TCApi: Screenshot Output"),
-     TCGroup("TCApi")]
+     TCGroup("Extended"),
+     TCGroup("WindowsOnly")]
     public class ScreenshotTest : AbstractTestCase
     {
         String testOutputPath = String.Empty;
