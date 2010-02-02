@@ -90,7 +90,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="XmlDiffPatch, Version=1.0.8.28, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(MSBuildProjectDirectory)\..\Dependencies\xmldiffpatch.dll</HintPath>
+      <HintPath>$(MSBuildProjectDirectory)\..\Dependencies\XmlDiffPatch.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
