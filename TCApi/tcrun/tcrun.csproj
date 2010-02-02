@@ -108,9 +108,7 @@
 copy /Y "$(TargetPath)".config "$(ProjectDir)..\..\tcrun\"</PostBuildEvent>
   </PropertyGroup>
   -->
-  <Target Name="RealClean">
-    <Delete Files="@FilesToDelete" />
-    <Message Text="Removing Directories: @SubDirectories" />
-    <RemoveDir Directories="@SubDirectories" />
-  </Target>
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(Projectdir)App.config" "$(TargetPath).config"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

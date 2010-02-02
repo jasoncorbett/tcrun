@@ -17,6 +17,19 @@
   </PropertyGroup>
   <Import Project="$(ExtensionTasksPath)Common.tasks" />
 
+  <PropertyGroup>
+    <BuildOutput>$(MSBuildProjectDirectory)\Output</BuildOutput>
+    <ProjectName>tcrun</ProjectName>
+  </PropertyGroup>
+  <ItemGroup>
+    <LibFiles Include="Dependencies\*" />
+    <LibFiles Include="TCApi\bin\$(Configuration)\TCApi.*" />
+    <ExecutableFiles Include="tcrun\bin\$(Configuration)\tcrun.*" />
+    <ExecutableFiles Include="tcrun\tcrun.sh" />
+    <ConfFiles Include="tcrun\default.ini" />
+    <TestFiles Include="TCApiTests\bin\$(Configuration)\TCApiTests*" />
+  </ItemGroup>
+
   <PropertyGroup Condition=" ('$(AspNetConfiguration)' == '') ">
     <AspNetConfiguration>$(Configuration)</AspNetConfiguration>
   </PropertyGroup>
@@ -98,9 +111,25 @@
     <CallTarget Targets="TCApi;tcrun;TCApiTests" RunEachTargetSeparately="false" />
   </Target>
   <Target Name="Clean" Condition="'$(CurrentSolutionConfigurationContents)' != ''">
+    <DelTree Directories="$(BuildOutput)" />
     <CallTarget Targets="TCApi:Clean;tcrun:Clean;TCApiTests:Clean" RunEachTargetSeparately="true" />
   </Target>
   <Target Name="Rebuild" Condition="'$(CurrentSolutionConfigurationContents)' != ''">
     <CallTarget Targets="TCApi:Rebuild;tcrun:Rebuild;TCApiTests:Rebuild" RunEachTargetSeparately="true" />
+  </Target>
+
+  <Target Name="Package" DependsOnTargets="Build">
+    <ReadLinesFromFile File="Version.txt">
+      <Output TaskParameter="Lines" PropertyName="VersionString" />
+    </ReadLinesFromFile>
+    <MakeDir Directories="$(BuildOutput)\$(ProjectName)-$(VersionString)" />
+    <MakeDir Directories="$(BuildOutput)\$(ProjectName)-$(VersionString)\lib" />
+    <MakeDir Directories="$(BuildOutput)\$(ProjectName)-$(VersionString)\conf" />
+    <MakeDir Directories="$(BuildOutput)\$(ProjectName)-$(VersionString)\tests" />
+    <Copy SourceFiles="@(LibFiles)" DestinationFolder="$(BuildOutput)\$(ProjectName)-$(VersionString)\lib" />
+    <Copy SourceFiles="@(ExecutableFiles)" DestinationFolder="$(BuildOutput)\$(ProjectName)-$(VersionString)" />
+    <Copy SourceFiles="tcrun\App.config" DestinationFiles="$(BuildOutput)\$(ProjectName)-$(VersionString)\tcrun.exe.config" />
+    <Copy SourceFiles="@(ConfFiles)" DestinationFolder="$(BuildOutput)\$(ProjectName)-$(VersionString)\conf" />
+    <Copy SourceFiles="@(TestFiles)" DestinationFolder="$(BuildOutput)\$(ProjectName)-$(VersionString)\tests" />
   </Target>
 </Project>
