@@ -9,6 +9,7 @@
     <UsingTask AssemblyFile="$(ExtensionTasksPath)BuildUtils.dll" TaskName="DelTree"/>
     <UsingTask AssemblyFile="$(ExtensionTasksPath)BuildUtils.dll" TaskName="GenerateVersionNumber"/>
     <UsingTask AssemblyFile="$(ExtensionTasksPath)BuildUtils.dll" TaskName="SetAssemblyVersion"/>
+    <UsingTask AssemblyFile="$(ExtensionTasksPath)BuildUtils.dll" TaskName="CreateZip"/>
 
 
     <Target Name="ReallyClean">
