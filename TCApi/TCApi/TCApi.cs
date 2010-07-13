@@ -147,7 +147,14 @@ namespace QA.Common.TCApi
         /// <param name="p_guid_string">The guid in string form.</param>
         public TCGuid(String p_guid_string)
         {
-            m_guid = new Guid(p_guid_string);
+            try
+            {
+                m_guid = new Guid(p_guid_string);
+            } 
+            catch(FormatException ex)
+            {
+                m_guid = Guid.Empty;
+            }
         }
 
         /// <summary>
