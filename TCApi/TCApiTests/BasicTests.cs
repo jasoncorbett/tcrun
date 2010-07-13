@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
@@ -178,4 +178,16 @@ namespace QA.Common.TCApi.Tests.Basic
             return TEST_RESULTS.Fail;
         }
     }
+	
+	[TCName("TCApi: Bad guid causes tcrun to crash."),
+	 TCGroup("TCApi"),
+	 TCGuid("BadGuid")]
+	public class BadGuidTest : AbstractTestCase
+	{
+		public override TEST_RESULTS tcDoTest ()
+		{
+			TCLog.Audit ("PASS: If this test ran, then it passed as it has a bad guid.");
+			return TEST_RESULTS.Pass;
+		}
+	}
 }
