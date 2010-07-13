@@ -162,6 +162,17 @@ namespace QA.Common.tcrun
 
             if (cmdLineParser.Parse())
             {
+                if (options.Mode == TEST_MODE.HELP)
+                {
+                    Console.WriteLine("Usage: tcrun [-d(--debug)] [-env(--environment) \"default\"] [-h(--help)|-l(--list)|-e(--export)] <-p(--plan) <testplan>|<tests>>");
+                    Console.WriteLine("\tenvironment: ini filename (minus the .ini) in the conf directory");
+                    Console.WriteLine("\tList exports test information to the screen");
+                    Console.WriteLine("\tExport (if it was implimented) would write tests to an xml file.");
+                    Console.WriteLine("\ttests: can be either a name of a group of tests, test numbers, guids, or a class name.");
+                    Console.WriteLine("\ttestplan: plain text file in the plans directory that contains the list of tests to run.");
+                    return 0;
+                }
+
                 IKernel injector = null;
                 try
                 {
@@ -189,23 +200,13 @@ namespace QA.Common.tcrun
                     return 1;
                 }
 
+
                 Dictionary<String, String> configuration = injector.Get<TCApiConfiguration>();
                 
                 // I shouldn't have to do this, and maybe there is a call to do it, but I can't find it.
                 foreach (String key in options.AddonConfiguration.Keys)
                 {
                     configuration[key] = options.AddonConfiguration[key];
-                }
-
-                if (options.Mode == TEST_MODE.HELP)
-                {
-                    Console.WriteLine("Usage: tcrun [-d(--debug)] [-env(--environment) \"default\"] [-h(--help)|-l(--list)|-e(--export)] <-p(--plan) <testplan>|<tests>>");
-                    Console.WriteLine("\tenvironment: ini filename (minus the .ini) in the conf directory");
-                    Console.WriteLine("\tList exports test information to the screen");
-                    Console.WriteLine("\tExport (if it was implimented) would write tests to an xml file.");
-                    Console.WriteLine("\ttests: can be either a name of a group of tests, test numbers, guids, or a class name.");
-                    Console.WriteLine("\ttestplan: plain text file in the plans directory that contains the list of tests to run.");
-                    return 0;
                 }
 
                 TestLoader test_loader = new DirectoryBasedAssemblyTestLoader();
