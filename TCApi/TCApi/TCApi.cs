@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using log4net;
 using IniParser;
 using Ninject.Core;
+using NUnit.Framework.Constraints;
+using NUnit.Framework;
 
 
 namespace QA.Common.TCApi
@@ -472,19 +474,33 @@ namespace QA.Common.TCApi
             }
         }
 
+        static private ILog abstract_tc_log = LogManager.GetLogger(typeof(AbstractTestCase));
+
+        private NUnitAssertConstraint check_constraint;
+
         /// <summary>
-        /// Obsolete, use TCLog attribute instead!
+        /// Property used for NUnit style constraints.  See http://nunit.org/index.php?p=constraintModel&r=2.5.5 for details.
+        /// Instead of using:
+        ///  <code>
+        ///     Assert.That( myString, Is.EqualTo("Hello") );
+        ///  </code>
+        /// Do:
+        ///  <code>
+        ///     Check.That( myString, Is.EqualTo("Hello") );
+        ///  </code>
+        /// Credit goes to Lee Higginson for the name of the property.
         /// </summary>
-        [Obsolete("Use TCLog now instead of TCLogger")]
-        protected ILog TCLogger
-        {
-            get
-            {
-                return TCLog;
+        protected NUnitAssertConstraint Check 
+        { 
+            get 
+            { 
+                if (check_constraint == null)
+                {
+                    check_constraint = new NUnitAssertConstraint(TCLog);
+                }
+                return check_constraint;
             }
         }
-
-        static private ILog abstract_tc_log = LogManager.GetLogger(typeof(AbstractTestCase));
 
         /// <summary>
         /// Default setup (you can override in a sub class), assigns configuration to a tc_info member variable.
@@ -590,5 +606,206 @@ namespace QA.Common.TCApi
             : base("ERROR: Test Case configuration key '" + key + "' is missing from any configuration source.")
         {
         }
+    }
+
+    /// <summary>
+    /// This code comes from NUnit's Assert class.  It is being modified specifically to log
+    /// successful constraints, otherwise it is just a copy of the Assert.That portion of
+    /// NUnit Assert Class.
+    /// </summary>
+    public class NUnitAssertConstraint
+    {
+        private ITestCaseLogger logger;
+
+        public NUnitAssertConstraint(ITestCaseLogger logger)
+        {
+            this.logger = logger;
+        }
+
+        /// <summary>
+        /// Apply a constraint to an actual value, succeeding if the constraint
+        /// is satisfied and throwing an assertion exception on failure.
+        /// </summary>
+        /// <param name="expression">A Constraint to be applied</param>
+        /// <param name="actual">The actual value to test</param>
+        public void That(object actual, IResolveConstraint expression)
+        {
+            That(actual, expression, null, null);
+        }
+
+        /// <summary>
+        /// Apply a constraint to an actual value, succeeding if the constraint
+        /// is satisfied and throwing an assertion exception on failure.
+        /// </summary>
+        /// <param name="expression">A Constraint to be applied</param>
+        /// <param name="actual">The actual value to test</param>
+        /// <param name="message">The message that will be displayed on failure</param>
+        public void That(object actual, IResolveConstraint expression, string message)
+        {
+            That(actual, expression, message, null);
+        }
+
+        /// <summary>
+        /// Apply a constraint to an actual value, succeeding if the constraint
+        /// is satisfied and throwing an assertion exception on failure.
+        /// </summary>
+        /// <param name="expression">A Constraint expression to be applied</param>
+        /// <param name="actual">The actual value to test</param>
+        /// <param name="message">The message that will be displayed on failure</param>
+        /// <param name="args">Arguments to be used in formatting the message</param>
+        public void That(object actual, IResolveConstraint expression, string message, params object[] args)
+        {
+            Constraint constraint = expression.Resolve();
+
+            MessageWriter writer = new TextMessageWriter(message, args);
+            constraint.WriteMessageTo(writer);
+            if (!constraint.Matches(actual))
+            {
+                throw new AssertionException(writer.ToString());
+            } else
+            {
+                logger.AuditFormat("SUCCESSFUL CHECK: {0}", writer.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Apply a constraint to an actual value, succeeding if the constraint
+        /// is satisfied and throwing an assertion exception on failure.
+        /// </summary>
+        /// <param name="expr">A Constraint expression to be applied</param>
+        /// <param name="del">An ActualValueDelegate returning the value to be tested</param>
+        public void That(ActualValueDelegate del, IResolveConstraint expr)
+        {
+            That(del, expr.Resolve(), null, null);
+        }
+
+        /// <summary>
+        /// Apply a constraint to an actual value, succeeding if the constraint
+        /// is satisfied and throwing an assertion exception on failure.
+        /// </summary>
+        /// <param name="expr">A Constraint expression to be applied</param>
+        /// <param name="del">An ActualValueDelegate returning the value to be tested</param>
+        /// <param name="message">The message that will be displayed on failure</param>
+        public void That(ActualValueDelegate del, IResolveConstraint expr, string message)
+        {
+            That(del, expr.Resolve(), message, null);
+        }
+
+        /// <summary>
+        /// Apply a constraint to an actual value, succeeding if the constraint
+        /// is satisfied and throwing an assertion exception on failure.
+        /// </summary>
+        /// <param name="del">An ActualValueDelegate returning the value to be tested</param>
+        /// <param name="expr">A Constraint expression to be applied</param>
+        /// <param name="message">The message that will be displayed on failure</param>
+        /// <param name="args">Arguments to be used in formatting the message</param>
+        public void That(ActualValueDelegate del, IResolveConstraint expr, string message, params object[] args)
+        {
+            Constraint constraint = expr.Resolve();
+
+            MessageWriter writer = new TextMessageWriter(message, args);
+            constraint.WriteMessageTo(writer);
+            if (!constraint.Matches(del))
+            {
+                throw new AssertionException(writer.ToString());
+            }
+            else
+            {
+                logger.AuditFormat("SUCCESSFUL CHECK: {0}", writer.ToString());
+            }
+        }
+
+
+        /// <summary>
+        /// Apply a constraint to a referenced value, succeeding if the constraint
+        /// is satisfied and throwing an assertion exception on failure.
+        /// </summary>
+        /// <param name="expression">A Constraint to be applied</param>
+        /// <param name="actual">The actual value to test</param>
+        public void That<T>(ref T actual, IResolveConstraint expression)
+        {
+            That(ref actual, expression.Resolve(), null, null);
+        }
+
+        /// <summary>
+        /// Apply a constraint to a referenced value, succeeding if the constraint
+        /// is satisfied and throwing an assertion exception on failure.
+        /// </summary>
+        /// <param name="expression">A Constraint to be applied</param>
+        /// <param name="actual">The actual value to test</param>
+        /// <param name="message">The message that will be displayed on failure</param>
+        public void That<T>(ref T actual, IResolveConstraint expression, string message)
+        {
+            That(ref actual, expression.Resolve(), message, null);
+        }
+
+        /// <summary>
+        /// Apply a constraint to a referenced value, succeeding if the constraint
+        /// is satisfied and throwing an assertion exception on failure.
+        /// </summary>
+        /// <param name="expression">A Constraint to be applied</param>
+        /// <param name="actual">The actual value to test</param>
+        /// <param name="message">The message that will be displayed on failure</param>
+        /// <param name="args">Arguments to be used in formatting the message</param>
+        public void That<T>(ref T actual, IResolveConstraint expression, string message, params object[] args)
+        {
+            Constraint constraint = expression.Resolve();
+
+            MessageWriter writer = new TextMessageWriter(message, args);
+            constraint.WriteMessageTo(writer);
+            if (!constraint.Matches(ref actual))
+            {
+                throw new AssertionException(writer.ToString());
+            }
+            else
+            {
+                logger.AuditFormat("SUCCESSFUL CHECK: {0}", writer.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Asserts that a condition is true. If the condition is false the method throws
+        /// an <see cref="AssertionException"/>.
+        /// </summary> 
+        /// <param name="condition">The evaluated condition</param>
+        /// <param name="message">The message to display if the condition is false</param>
+        /// <param name="args">Arguments to be used in formatting the message</param>
+        public void That(bool condition, string message, params object[] args)
+        {
+            That(condition, Is.True, message, args);
+        }
+
+        /// <summary>
+        /// Asserts that a condition is true. If the condition is false the method throws
+        /// an <see cref="AssertionException"/>.
+        /// </summary>
+        /// <param name="condition">The evaluated condition</param>
+        /// <param name="message">The message to display if the condition is false</param>
+        public void That(bool condition, string message)
+        {
+            That(condition, Is.True, message, null);
+        }
+
+        /// <summary>
+        /// Asserts that a condition is true. If the condition is false the method throws
+        /// an <see cref="AssertionException"/>.
+        /// </summary>
+        /// <param name="condition">The evaluated condition</param>
+        public void That(bool condition)
+        {
+            That(condition, Is.True, null, null);
+        }
+
+        /// <summary>
+        /// Asserts that the code represented by a delegate throws an exception
+        /// that satisfies the constraint provided.
+        /// </summary>
+        /// <param name="code">A TestDelegate to be executed</param>
+        /// <param name="constraint">A ThrowsConstraint used in the test</param>
+        public void That(TestDelegate code, IResolveConstraint constraint)
+        {
+            That((object)code, constraint);
+        }
+
     }
 }

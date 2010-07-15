@@ -5,6 +5,7 @@ using System.IO;
 using Ninject.Core;
 using QA.Common.TCApi;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 
 namespace QA.Common.TCApi.Tests.Basic
 {
@@ -201,16 +202,8 @@ namespace QA.Common.TCApi.Tests.Basic
         {
             ITestRunner test_runner = DefaultRunner.getRunnerFor(typeof(CausesAssertionException));
             TEST_RESULTS result = test_runner.runTest(new CausesAssertionException(), tc_info);
-            if (result == TEST_RESULTS.Fail)
-            {
-                TCLog.Audit("PASS: A Testcase that had a Assert.IsTrue(false) during tcDoTest caused a Failure as expected.");
-                return TEST_RESULTS.Pass;
-            }
-            else
-            {
-                TCLog.AuditFormat("FAIL: the inner test did a Assert.IsTrue(false) during tcDoTest which should have caused a Failure, but resulted in: {0}", result);
-                return TEST_RESULTS.Fail;
-            }
+            Check.That(result, Is.EqualTo(TEST_RESULTS.Fail), "Assert.IsTrue(false) during tcDoTest should cause a failure.");
+            return TEST_RESULTS.Pass;
         }
     }
 
