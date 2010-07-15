@@ -4,6 +4,7 @@ using System.Linq;
 using System.IO;
 using Ninject.Core;
 using QA.Common.TCApi;
+using NUnit.Framework;
 
 namespace QA.Common.TCApi.Tests.Basic
 {
@@ -190,4 +191,54 @@ namespace QA.Common.TCApi.Tests.Basic
 			return TEST_RESULTS.Pass;
 		}
 	}
+
+    [TCName("TCApi: Asserts from NUnit.Framework cause Failure."),
+     TCGroup("TCApi")]
+    public class NUnitAssertsTest : AbstractTestCase
+    {
+
+        public override TEST_RESULTS tcDoTest()
+        {
+            ITestRunner test_runner = DefaultRunner.getRunnerFor(typeof(CausesAssertionException));
+            TEST_RESULTS result = test_runner.runTest(new CausesAssertionException(), tc_info);
+            if (result == TEST_RESULTS.Fail)
+            {
+                TCLog.Audit("PASS: A Testcase that had a Assert.IsTrue(false) during tcDoTest caused a Failure as expected.");
+                return TEST_RESULTS.Pass;
+            }
+            else
+            {
+                TCLog.AuditFormat("FAIL: the inner test did a Assert.IsTrue(false) during tcDoTest which should have caused a Failure, but resulted in: {0}", result);
+                return TEST_RESULTS.Fail;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Do not use, only for use inside of NUnitAssertsTest
+    /// </summary>
+    public class CausesAssertionException : ITestCase
+    {
+        public TEST_RESULTS tcDoTest()
+        {
+            Assert.IsTrue(false, "This should cause a failure.");
+            // this code should never be reached.
+            return TEST_RESULTS.Pass;
+        }
+
+        public void tcSetup(Dictionary<string, string> configuration)
+        {
+        }
+
+        public void tcCleanup()
+        {
+        }
+
+        public bool handleException(TestCaseStage p_stage, Exception p_error)
+        {
+            return false;
+        }
+    }
+
+
 }
