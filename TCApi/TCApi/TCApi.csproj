@@ -59,6 +59,11 @@
       <HintPath>$(MSBuildProjectDirectory)\..\Dependencies\INIFileParser.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="nunit.framework, Version=2.5.5.10112, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(MSBuildProjectDirectory)\..\Dependencies\nunit.framework.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=f9a0971c97b66427, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(MSBuildProjectDirectory)\..\Dependencies\log4net.dll</HintPath>
