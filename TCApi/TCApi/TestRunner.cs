@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NUnit.Framework;
 using log4net;
 
 namespace QA.Common.TCApi
@@ -100,6 +101,10 @@ namespace QA.Common.TCApi
 
                             // if it's a validation error, the test will fail, otherwise it's a script error
                             if (typeof(ValidationError).IsAssignableFrom(ex.GetType()))
+                            {
+                                result = TEST_RESULTS.Fail;
+                            }
+                            else if (typeof(AssertionException).IsAssignableFrom(ex.GetType()))
                             {
                                 result = TEST_RESULTS.Fail;
                             }
