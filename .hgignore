@@ -4,3 +4,4 @@
 .*/obj/.*
 TCApi/BuildExtensions/BuildUtils/BuildUtils.pidb
 TCApi/Version.txt
+TCApi/Output/.*
