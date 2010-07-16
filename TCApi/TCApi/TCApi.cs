@@ -658,13 +658,14 @@ namespace QA.Common.TCApi
             Constraint constraint = expression.Resolve();
 
             MessageWriter writer = new TextMessageWriter(message, args);
-            constraint.WriteMessageTo(writer);
             if (!constraint.Matches(actual))
             {
+                constraint.WriteMessageTo(writer);
                 throw new AssertionException(writer.ToString());
             } else
+                constraint.WriteMessageTo(writer);
             {
-                logger.AuditFormat("SUCCESSFUL CHECK: {0}", writer.ToString());
+                logger.AuditFormat("SUCCESSFUL CHECK: {0}", writer.ToString().Replace("\r\n", " ").Replace("\n", " "));
             }
         }
 
@@ -704,14 +705,15 @@ namespace QA.Common.TCApi
             Constraint constraint = expr.Resolve();
 
             MessageWriter writer = new TextMessageWriter(message, args);
-            constraint.WriteMessageTo(writer);
             if (!constraint.Matches(del))
             {
+                constraint.WriteMessageTo(writer);
                 throw new AssertionException(writer.ToString());
             }
             else
             {
-                logger.AuditFormat("SUCCESSFUL CHECK: {0}", writer.ToString());
+                constraint.WriteMessageTo(writer);
+                logger.AuditFormat("SUCCESSFUL CHECK: {0}", writer.ToString().Replace("\r\n", " ").Replace("\n", " "));
             }
         }
 
@@ -752,14 +754,15 @@ namespace QA.Common.TCApi
             Constraint constraint = expression.Resolve();
 
             MessageWriter writer = new TextMessageWriter(message, args);
-            constraint.WriteMessageTo(writer);
             if (!constraint.Matches(ref actual))
             {
+                constraint.WriteMessageTo(writer);
                 throw new AssertionException(writer.ToString());
             }
             else
             {
-                logger.AuditFormat("SUCCESSFUL CHECK: {0}", writer.ToString());
+                constraint.WriteMessageTo(writer);
+                logger.AuditFormat("SUCCESSFUL CHECK: {0}", writer.ToString().Replace("\r\n", " ").Replace("\n", " "));
             }
         }
 
