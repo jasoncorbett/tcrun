@@ -1,0 +1,6 @@
+\.orig$
+\.userprefs$
+.*/bin/.*
+.*/obj/.*
+TCApi/BuildExtensions/BuildUtils/BuildUtils.pidb
+TCApi/Version.txt
