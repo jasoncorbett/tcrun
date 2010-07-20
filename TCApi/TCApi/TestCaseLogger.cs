@@ -258,9 +258,13 @@ namespace QA.Common.TCApi
         /// Not implemented.
         /// </summary>
         /// <param name="name"></param>
-        public void logScreenShot(String name)
+        public void logScreenShot (String name)
         {
-            String screenShotPathName = Path.Combine(OutputPath, name);
+        	if (!(name.EndsWith (".png") || name.EndsWith (".PNG")))
+			{
+        		name += ".png";
+        	}
+			String screenShotPathName = Path.Combine(OutputPath, name);
             using (Bitmap screenshot = ScreenShot())
             {
                 screenshot.Save(screenShotPathName);

@@ -57,8 +57,8 @@ namespace QA.Common.TCApi.Tests.Basic
 
     // Took it out of TCApi as this test doesn't work on mono / on a build server
     [TCName("TCApi: Screenshot Output"),
-     TCGroup("Extended"),
-     TCGroup("WindowsOnly")]
+     TCGroup("TCApiExtended"),
+     TCGroup("TCApiWindowsOnly")]
     public class ScreenshotTest : AbstractTestCase
     {
         String testOutputPath = String.Empty;
@@ -258,6 +258,21 @@ namespace QA.Common.TCApi.Tests.Basic
 			{
 				Assert.Fail ("tcrun -v didn't exit after 10 seconds.");
 			}
+			return TEST_RESULTS.Pass;
+		}
+	}
+	
+	[TCName("TCApi: Logger adds .png if missing"),
+	 TCGroup("TCApiExtended"),
+	 TCGroup("TCApiWindowsOnly")]
+	public class LogScreenShotPngAdded : AbstractTestCase
+	{
+		public override TEST_RESULTS tcDoTest ()
+		{
+			BasicTestCaseLogger real_tc_logger = (BasicTestCaseLogger)TCLog;
+			real_tc_logger.logScreenShot ("foo");
+			String sspath = Path.Combine (real_tc_logger.OutputPath, "foo.png");
+			Check.That (File.Exists (sspath), "Path of screen shot " + sspath + " should exist.");
 			return TEST_RESULTS.Pass;
 		}
 	}
