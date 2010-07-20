@@ -534,11 +534,19 @@ namespace QA.Common.TCApi
         /// <param name="stage">stage of the test</param>
         /// <param name="ex">The exception thrown.</param>
         /// <returns>false, always.</returns>
-        public virtual bool handleException(TestCaseStage stage, Exception ex)
+        public virtual bool handleException (TestCaseStage stage, Exception ex)
         {
-            abstract_tc_log.Debug("Inside default implementation of handleException(stage, exception).");
-            abstract_tc_log.Error("Exception occured during " + stage.ToString() + " stage of testing.", ex);
-            ErrorFromTest = ex;
+        	abstract_tc_log.Debug ("Inside default implementation of handleException(stage, exception).");
+        	abstract_tc_log.Error ("Exception occured during " + stage.ToString () + " stage of testing.", ex);
+        	ErrorFromTest = ex;
+        	try
+			{
+        		TCLog.logScreenShot (stage + "-exception.png");
+        	} catch (Exception)
+			{
+				// ignore, don't go into an infinate loop here.
+			}
+			
             if (typeof(ValidationError).IsAssignableFrom(ex.GetType()))
             {
                 TCLog.Error("FAIL: " + ex.Message, ex);
