@@ -175,12 +175,18 @@ namespace QA.Common.tcrun
             {
         		if (options.Mode == TEST_MODE.HELP)
                 {
-        			Console.WriteLine ("Usage: tcrun [-d(--debug)] [-env(--environment) \"default\"] [-h(--help)|-l(--list)|-e(--export)] <-p(--plan) <testplan>|<tests>>");
-        			Console.WriteLine ("\tenvironment: ini filename (minus the .ini) in the conf directory");
-        			Console.WriteLine ("\tList exports test information to the screen");
-        			Console.WriteLine ("\tExport (if it was implimented) would write tests to an xml file.");
-        			Console.WriteLine ("\ttests: can be either a name of a group of tests, test numbers, guids, or a class name.");
-        			Console.WriteLine ("\ttestplan: plain text file in the plans directory that contains the list of tests to run.");
+        			Console.WriteLine ("Usage: tcrun [options] <-p plan|test.class.name|tcgroup>");
+        			Console.WriteLine ("Options:");
+        			foreach (Parser.SwitchInfo info in cmdLineParser.Switches)
+					{
+        				if (info.Aliases != null)
+						{
+        					Console.WriteLine ("\t-{0,-4}| -{1,-12}{2}", info.Aliases[0], info.Name, info.Description);
+        				} else
+						{
+        					Console.WriteLine ("\t-{0,-18}{1}", info.Name, info.Description);
+						}
+					}
         			return 0;
         		}
                 else if (options.Mode == TEST_MODE.VERSION)
