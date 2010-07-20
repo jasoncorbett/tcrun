@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Reflection;
+using System.Diagnostics;
 using Ninject.Core;
 using QA.Common.TCApi;
 using NUnit.Framework;
@@ -233,5 +235,31 @@ namespace QA.Common.TCApi.Tests.Basic
         }
     }
 
+	[TCName("TCApi: Version reported with -v command line option."),
+	 TCGroup("TCApi")]
+	public class VersionInformationTest : AbstractTestCase
+	{
+		public override TEST_RESULTS tcDoTest ()
+		{
+			ProcessStartInfo psi = new ProcessStartInfo (Assembly.GetEntryAssembly ().Location, "-v");
+			psi.RedirectStandardOutput = true;
+			psi.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+			psi.UseShellExecute = false;
+			Process version_output = Process.Start (psi);
+			System.IO.StreamReader myOutput = version_output.StandardOutput;
+			version_output.WaitForExit (10000);
+			if (version_output.HasExited) 
+			{
+				string output = myOutput.ReadToEnd ().Trim ();
+				TCLog.AuditFormat ("Output from tcrun -v: {0}", output);
+				Check.That (output, Is.StringMatching ("tcrun version: \\d\\.\\d\\.\\d\\..*"));
+			}
+			else
+			{
+				Assert.Fail ("tcrun -v didn't exit after 10 seconds.");
+			}
+			return TEST_RESULTS.Pass;
+		}
+	}
 
 }

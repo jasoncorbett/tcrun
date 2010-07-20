@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using log4net.Core;
@@ -17,7 +18,8 @@ namespace QA.Common.tcrun
         LIST,
         EXPORT,
         RUN,
-        HELP
+        HELP,
+        VERSION
     }
 
 
@@ -47,6 +49,15 @@ namespace QA.Common.tcrun
             get { return m_mode == TEST_MODE.EXPORT; }
         }
 
+        [CommandLineSwitch("version", "Get the current version of tcrun."),
+         CommandLineAlias("v")]
+        public bool Version
+        {
+            set { setTestMode(TEST_MODE.VERSION, value); }
+            get { return m_mode == TEST_MODE.VERSION; }
+        }
+
+        
         [CommandLineSwitch("help", "Get command line help for this command."),
          CommandLineAlias("h")]
         public bool Help
@@ -150,26 +161,39 @@ namespace QA.Common.tcrun
     {
 
         [STAThread]
-        static int Main(string[] args)
+        static int Main (string[] args)
         {
-            if (args.Length == 0)
+        	if (args.Length == 0)
             {
-                Console.WriteLine("You must specify at least one test number or test group to run.");
-                return 1;
-            }
-            TCRunOptions options = new TCRunOptions();
-            Parser cmdLineParser = new Parser(System.Environment.CommandLine, options);
+        		Console.WriteLine ("You must specify at least one test number or test group to run.");
+        		return 1;
+        	}
+        	TCRunOptions options = new TCRunOptions ();
+        	Parser cmdLineParser = new Parser (System.Environment.CommandLine, options);
 
-            if (cmdLineParser.Parse())
+            if (cmdLineParser.Parse ())
             {
-                if (options.Mode == TEST_MODE.HELP)
+        		if (options.Mode == TEST_MODE.HELP)
                 {
-                    Console.WriteLine("Usage: tcrun [-d(--debug)] [-env(--environment) \"default\"] [-h(--help)|-l(--list)|-e(--export)] <-p(--plan) <testplan>|<tests>>");
-                    Console.WriteLine("\tenvironment: ini filename (minus the .ini) in the conf directory");
-                    Console.WriteLine("\tList exports test information to the screen");
-                    Console.WriteLine("\tExport (if it was implimented) would write tests to an xml file.");
-                    Console.WriteLine("\ttests: can be either a name of a group of tests, test numbers, guids, or a class name.");
-                    Console.WriteLine("\ttestplan: plain text file in the plans directory that contains the list of tests to run.");
+        			Console.WriteLine ("Usage: tcrun [-d(--debug)] [-env(--environment) \"default\"] [-h(--help)|-l(--list)|-e(--export)] <-p(--plan) <testplan>|<tests>>");
+        			Console.WriteLine ("\tenvironment: ini filename (minus the .ini) in the conf directory");
+        			Console.WriteLine ("\tList exports test information to the screen");
+        			Console.WriteLine ("\tExport (if it was implimented) would write tests to an xml file.");
+        			Console.WriteLine ("\ttests: can be either a name of a group of tests, test numbers, guids, or a class name.");
+        			Console.WriteLine ("\ttestplan: plain text file in the plans directory that contains the list of tests to run.");
+        			return 0;
+        		}
+                else if (options.Mode == TEST_MODE.VERSION)
+                {
+        			object[] attrs = Assembly.GetExecutingAssembly ().GetCustomAttributes (typeof(AssemblyInformationalVersionAttribute), false);
+        			if (attrs.Length > 0)
+					{
+        				Console.WriteLine ("tcrun version: " + ((AssemblyInformationalVersionAttribute)attrs[0]).InformationalVersion);
+        			}
+					else
+					{
+        				Console.WriteLine ("tcrun version: unknown");
+					}
                     return 0;
                 }
 

@@ -665,7 +665,7 @@ namespace QA.Common.TCApi
             } else
                 constraint.WriteMessageTo(writer);
             {
-                logger.AuditFormat("SUCCESSFUL CHECK: {0}", writer.ToString().Replace("\r\n", " ").Replace("\n", " "));
+                logger.AuditFormat("SUCCESSFUL CHECK: {0}", writer.ToString().Replace("\r\n", " ").Replace("\n", " ").Replace("But was", "Actual"));
             }
         }
 
@@ -713,7 +713,7 @@ namespace QA.Common.TCApi
             else
             {
                 constraint.WriteMessageTo(writer);
-                logger.AuditFormat("SUCCESSFUL CHECK: {0}", writer.ToString().Replace("\r\n", " ").Replace("\n", " "));
+                logger.AuditFormat("SUCCESSFUL CHECK: {0}", writer.ToString().Replace("\r\n", " ").Replace("\n", " ").Replace("But was", "Actual"));
             }
         }
 
@@ -762,7 +762,7 @@ namespace QA.Common.TCApi
             else
             {
                 constraint.WriteMessageTo(writer);
-                logger.AuditFormat("SUCCESSFUL CHECK: {0}", writer.ToString().Replace("\r\n", " ").Replace("\n", " "));
+                logger.AuditFormat("SUCCESSFUL CHECK: {0}", writer.ToString().Replace("\r\n", " ").Replace("\n", " ").Replace("But was", "Actual"));
             }
         }
 
