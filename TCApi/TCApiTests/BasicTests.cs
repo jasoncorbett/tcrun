@@ -277,4 +277,24 @@ namespace QA.Common.TCApi.Tests.Basic
 		}
 	}
 
+    [TCName("TCApi: Nullreference during uninitialized configValue call provides information."),
+     TCGroup("TCApi")]
+    public class UninitializedConfigValueTest : AbstractTestCase
+    {
+		public override TEST_RESULTS tcDoTest ()
+		{
+            tc_info = null;
+            try
+            {
+                configValue("foo.bar");
+            } catch(NullReferenceException ex)
+            {
+                Check.That (ex.Message, Is.StringContaining("foo.bar"));
+                Check.That (ex.Message, Is.StringContaining("tc_info"));
+                Check.That (ex.Message, Is.StringContaining("tcSetup"));
+                return TEST_RESULTS.Pass;
+            }
+            return TEST_RESULTS.Fail;
+        }
+    }
 }

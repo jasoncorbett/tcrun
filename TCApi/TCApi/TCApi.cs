@@ -599,6 +599,11 @@ namespace QA.Common.TCApi
         public String configValue(String key)
         {
             abstract_tc_log.DebugFormat("Attempting to get config value for key '{0}'.", key);
+            if (tc_info == null)
+            {
+                TCLog.ErrorFormat("Cannot load configuration key '{0}', tc_info is null.  Maybe you haven't called base.tcSetup(configuration) yet?", key);
+                throw new NullReferenceException("tc_info was found to be null while looking for configuration key '" + key + "'.  Maybe you haven't called base.tcSetup(configuration) yet?");
+            }
             if (!tc_info.ContainsKey(key))
             {
                 TCLog.ErrorFormat("Configuration key '{0}' missing.", key);
